@@ -1,22 +1,24 @@
-let Name = "FunctionUp"
+const Name = "FunctionUp"
 
-let TrimData = function() {
-    let Trim = Name.trim()
+let Trim = function() {
+    let Trim1 = Name.trim()
     //console.log(Name.trim())
-    return Trim
+    return Trim1
  }
 
- function Lowercase() {
+ let Lowercase = function() {
     let Lowercase1 = Name.toLowerCase()
     //console.log(Name.toLowerCase())
     return Lowercase1
  }
 
- function Upppercase() {
-    console.log(Name.toUpperCase())
+ let Uppercase = function() {
+    //console.log(Name.toUpperCase())
+    let Uppercase1 = Name.toUpperCase()
+    return Uppercase1
  }
 
 
-module.exports.TrimData = TrimData
+module.exports.TrimData = Trim
 module.exports.Lowercase = Lowercase
-module.exports.Uppercase = Upppercase
+module.exports.Uppercase = Uppercase
