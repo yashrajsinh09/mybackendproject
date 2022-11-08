@@ -1,27 +1,56 @@
-const userModel = require("../models/userModel")
-const jwt = require("jsonwebtoken")
+const jwt = require ("jsonwebtoken")
 
-const isTokenValid = async function (req, res, next) {
 
-    let header = req.headers["x-auth-token"]
+const Authentication=async function(req,res,next){
+    
+    let token=req.headers["x-auth-Token"]
+    if(!token)token=req.headers["x-auth-token"]
+    if(!token) return res.send({status:false,msg:"Token is required."})
+    
+    let decodeToken=jwt.verify(token,"lithium-yashraj")
+    req["decodeToken"]=decodeToken
 
-    if (!header) {
-        res.send({
-            status: false,
-            msg: "Token is not Available",
-        })
-    }
-    let verifyingToken = jwt.verify(header, "lithium-yashraj")
-    req.verifyingToken = verifyingToken;
+    if(!decodeToken) return res.send({status:false,msg:"Token is invlid"})
+    
     next()
 }
 
-const autherisation = function(req, res, next){
-    let userId = req.params.userId;
-    if(req.decode.userId !=userId){
-        return res.send("You cant update details")
+
+
+// let authorization=async function(req,res,next){
+    
+//     let loggedInUserId= req.decodeToken.userId
+//     let reqestedUserId=req.params.userId
+//     // console.log(reqestedUserId,loggedInUserId)
+//     if(reqestedUserId != loggedInUserId ){
+//         return res.send({status:false,message:"no permission"})
+//     }
+//     next()
+// }
+
+
+const authorization = function(req, res, next){
+    let token = req.headers["x-auth-token"]
+    if(!token){
+        return res.send("Header is not avilable")
+    }
+    
+    let decode = jwt.verify(token, "lithium-yashraj")
+    if(!decode){
+        return res.send("invalid Token")
+    }
+    let usertobe = req.params.userId
+    let userlogin = decode.Id
+    if(usertobe != userlogin){
+        res.send({msg: "Its Not your Id"})
     }
     next()
 }
 
-module.exports = {isTokenValid,autherisation}
+
+
+
+
+
+module.exports.Authentication=Authentication
+module.exports.authorization=authorization      
